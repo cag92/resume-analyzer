@@ -1,0 +1,49 @@
+body {
+  font-family: Arial;
+  background: #f5f7fa;
+}
+
+.container {
+  width: 700px;
+  margin: auto;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+textarea {
+  width: 100%;
+  height: 150px;
+}
+
+button {
+  background: #007bff;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+}
+
+.progress {
+  background: #ddd;
+  border-radius: 10px;
+}
+
+.progress-fill {
+  background: green;
+  color: white;
+  padding: 5px;
+}
+
+.good { color: green; }
+.bad { color: red; }
+
+.highlight {
+  background: yellow;
+  font-weight: bold;
+}
+
+#loading {
+  display: none;
+}
