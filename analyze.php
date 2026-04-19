@@ -14,9 +14,8 @@ if (!isset($_FILES['resume']) || $_FILES['resume']['error'] !== 0) {
     die("File upload failed.");
 }
 
-// Get inputs
-$resumeFile = $_FILES['resume']['tmp_name'];
-$resumeText = file_get_contents($resumeFile);
+// Read inputs
+$resumeText = file_get_contents($_FILES['resume']['tmp_name']);
 $rawJobDesc = $_POST['jobdesc'];
 
 // Clean text
@@ -28,7 +27,7 @@ function cleanText($text) {
 $cleanResume = cleanText($resumeText);
 $cleanJob = cleanText($rawJobDesc);
 
-// Skills
+// Skills list
 $skills = ["python","java","sql","html","css","javascript","react","aws","docker"];
 
 function findSkills($text, $skills) {
@@ -41,6 +40,7 @@ function findSkills($text, $skills) {
     return $found;
 }
 
+// Match logic
 $resumeSkills = findSkills($cleanResume, $skills);
 $jobSkills = findSkills($cleanJob, $skills);
 
@@ -58,53 +58,55 @@ foreach ($missing as $skill) {
     );
 }
 
+// 🤖 AI Section
 
-// AI REQUEST
+$aiOutput = "AI temporarily unavailable (rate limit reached).";
 
-$prompt = "
-You are an AI resume analyzer.
+if (strlen($rawJobDesc) > 50) {
 
-Compare this resume to the job description.
+    $prompt = "Compare this resume to the job description and give:
+    - Match score
+    - Strengths
+    - Missing skills
+    - Suggestions
 
-Give:
-- Match score (0-100)
-- 3 strengths
-- 3 missing skills
-- Suggestions
+    Resume:
+    $resumeText
 
-Resume:
-$resumeText
+    Job:
+    $rawJobDesc";
 
-Job Description:
-$rawJobDesc
-";
+    $data = [
+        "model" => "gpt-4o-mini",
+        "messages" => [
+            ["role" => "user", "content" => $prompt]
+        ]
+    ];
 
-$data = [
-    "model" => "gpt-4o-mini",
-    "messages" => [
-        ["role" => "user", "content" => $prompt]
-    ]
-];
+    $options = [
+        "http" => [
+            "header" => "Content-Type: application/json\r\n" .
+                        "Authorization: Bearer $OPENAI_API_KEY\r\n",
+            "method" => "POST",
+            "content" => json_encode($data)
+        ]
+    ];
 
-// Use file_get_contents (more compatible than curl)
-$options = [
-    "http" => [
-        "header" => "Content-Type: application/json\r\n" .
-                    "Authorization: Bearer $OPENAI_API_KEY\r\n",
-        "method" => "POST",
-        "content" => json_encode($data)
-    ]
-];
+    $context = stream_context_create($options);
 
-$context = stream_context_create($options);
-$response = file_get_contents("https://api.openai.com/v1/chat/completions", false, $context);
+    // suppress error to avoid crash
+    $response = @file_get_contents(
+        "https://api.openai.com/v1/chat/completions",
+        false,
+        $context
+    );
 
-$aiOutput = "AI unavailable.";
+    if ($response !== false) {
+        $result = json_decode($response, true);
 
-if ($response !== false) {
-    $result = json_decode($response, true);
-    if (isset($result["choices"][0]["message"]["content"])) {
-        $aiOutput = $result["choices"][0]["message"]["content"];
+        if (isset($result["choices"][0]["message"]["content"])) {
+            $aiOutput = $result["choices"][0]["message"]["content"];
+        }
     }
 }
 ?>
@@ -142,6 +144,8 @@ if ($response !== false) {
 <hr>
 
 <h2>AI Analysis</h2>
+<p style="color:orange;">(May be limited due to API usage)</p>
+
 <div class="ai-box">
 <?php echo nl2br(htmlspecialchars($aiOutput)); ?>
 </div>
