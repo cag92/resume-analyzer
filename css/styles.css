@@ -44,6 +44,14 @@ button {
   font-weight: bold;
 }
 
+
 #loading {
   display: none;
+}
+
+.ai-box {
+  background: #f0f4ff;
+  padding: 15px;
+  border-radius: 10px;
+  margin-top: 20px;
 }
