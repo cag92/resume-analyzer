@@ -1,36 +1,21 @@
 # AI Resume Analyzer
 
-A web-based tool that analyzes how well a resume matches a job description using keyword and skill matching.
+A web app that compares resumes to job descriptions using both keyword matching and AI.
 
 ## Features
-- Upload resume (TXT)
-- Paste job description
-- Match score calculation
-- Missing skills detection
-- Highlighted job description analysis
-
-## Technologies Used
-- PHP
-- HTML/CSS
-- JavaScript
-
-## How It Works
-1. Resume text is extracted
-2. Text is cleaned and normalized
-3. Skills are matched against job description
-4. A match score is calculated
-5. Missing skills are highlighted
-
-## How to Run
-1. Place project in a local server (XAMPP, MAMP, etc.)
-2. Open `index.php` in browser
-3. Upload a resume and paste a job description
-
-## Example
-Sample files are provided in `/sample` folder.
+- Resume upload
+- Skill matching
+- Match score visualization
+- AI-powered feedback
 
 ## Live Demo
+
+Basic Version:
 https://christiangay.rf.gd
- 
-## Author
-Christian Gay
+
+AI Version:
+https://your-render-app.onrender.com
+
+## Setup
+1. Copy config.example.php → config.php
+2. Add your API key

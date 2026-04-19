@@ -1,27 +1,36 @@
 <?php
-require_once("config.php");
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+// Get API key from Render
+$OPENAI_API_KEY = getenv("OPENAI_API_KEY");
+
+if (!$OPENAI_API_KEY) {
+    die("Missing API key.");
+}
+
+// Validate upload
+if (!isset($_FILES['resume']) || $_FILES['resume']['error'] !== 0) {
+    die("File upload failed.");
+}
+
+// Get inputs
+$resumeFile = $_FILES['resume']['tmp_name'];
+$resumeText = file_get_contents($resumeFile);
+$rawJobDesc = $_POST['jobdesc'];
 
 // Clean text
 function cleanText($text) {
     $text = strtolower($text);
-    $text = preg_replace("/[^a-z0-9 ]/", "", $text);
-    return $text;
+    return preg_replace("/[^a-z0-9 ]/", "", $text);
 }
 
-// Inputs
-$resumeFile = $_FILES['resume']['tmp_name'];
-$rawJobDesc = $_POST['jobdesc'];
-
-$resumeText = file_get_contents($resumeFile);
-
-// Clean versions
 $cleanResume = cleanText($resumeText);
 $cleanJob = cleanText($rawJobDesc);
 
-// Skill list
+// Skills
 $skills = ["python","java","sql","html","css","javascript","react","aws","docker"];
 
-// Find skills
 function findSkills($text, $skills) {
     $found = [];
     foreach ($skills as $skill) {
@@ -35,12 +44,12 @@ function findSkills($text, $skills) {
 $resumeSkills = findSkills($cleanResume, $skills);
 $jobSkills = findSkills($cleanJob, $skills);
 
-// Score
 $matched = array_intersect($resumeSkills, $jobSkills);
 $missing = array_diff($jobSkills, $resumeSkills);
+
 $score = count($matched) / max(count($jobSkills), 1) * 100;
 
-// Highlight missing
+// Highlight missing skills
 foreach ($missing as $skill) {
     $rawJobDesc = str_ireplace(
         $skill,
@@ -50,7 +59,7 @@ foreach ($missing as $skill) {
 }
 
 
-//AI SECTION
+// AI REQUEST
 
 $prompt = "
 You are an AI resume analyzer.
@@ -77,22 +86,27 @@ $data = [
     ]
 ];
 
-$ch = curl_init("https://api.openai.com/v1/chat/completions");
+// Use file_get_contents (more compatible than curl)
+$options = [
+    "http" => [
+        "header" => "Content-Type: application/json\r\n" .
+                    "Authorization: Bearer $OPENAI_API_KEY\r\n",
+        "method" => "POST",
+        "content" => json_encode($data)
+    ]
+];
 
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_POST, true);
-curl_setopt($ch, CURLOPT_HTTPHEADER, [
-    "Content-Type: application/json",
-    "Authorization: Bearer " . $OPENAI_API_KEY
-]);
-curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+$context = stream_context_create($options);
+$response = file_get_contents("https://api.openai.com/v1/chat/completions", false, $context);
 
-$response = curl_exec($ch);
-curl_close($ch);
+$aiOutput = "AI unavailable.";
 
-$result = json_decode($response, true);
-$aiOutput = $result["choices"][0]["message"]["content"] ?? "AI unavailable.";
-
+if ($response !== false) {
+    $result = json_decode($response, true);
+    if (isset($result["choices"][0]["message"]["content"])) {
+        $aiOutput = $result["choices"][0]["message"]["content"];
+    }
+}
 ?>
 
 <!DOCTYPE html>

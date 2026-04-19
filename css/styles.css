@@ -1,15 +1,14 @@
 body {
   font-family: Arial;
-  background: #f5f7fa;
+  background: #f5f7fb;
 }
 
 .container {
-  width: 700px;
+  width: 60%;
   margin: auto;
   background: white;
   padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  border-radius: 10px;
 }
 
 textarea {
@@ -18,14 +17,24 @@ textarea {
 }
 
 button {
-  background: #007bff;
-  color: white;
   padding: 10px;
-  border: none;
-  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.highlight {
+  background: yellow;
+}
+
+.good {
+  color: green;
+}
+
+.bad {
+  color: red;
 }
 
 .progress {
+  width: 100%;
   background: #ddd;
   border-radius: 10px;
 }
@@ -33,25 +42,12 @@ button {
 .progress-fill {
   background: green;
   color: white;
-  padding: 5px;
-}
-
-.good { color: green; }
-.bad { color: red; }
-
-.highlight {
-  background: yellow;
-  font-weight: bold;
-}
-
-
-#loading {
-  display: none;
+  text-align: center;
+  border-radius: 10px;
 }
 
 .ai-box {
-  background: #f0f4ff;
+  background: #eef3ff;
   padding: 15px;
   border-radius: 10px;
-  margin-top: 20px;
 }
