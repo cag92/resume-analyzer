@@ -1,32 +1,21 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>AI Resume Analyzer</title>
-    <link rel="stylesheet" href="css/styles.css">
-</head>
-<body>
+<div class="header">🚀 AI Resume Analyzer</div>
 
 <div class="container">
-    <h1>🚀 AI Resume Analyzer</h1>
-    <p>Upload your resume and compare it to a job description using AI.</p>
+    <div class="card">
+        <h2>Analyze Your Resume</h2>
 
-    <form action="analyze.php" method="post" enctype="multipart/form-data">
+        <form action="analyze.php" method="post" enctype="multipart/form-data">
 
-        <label><b>Upload Resume (PDF or TXT)</b></label>
-        <input type="file" name="resume_file" accept=".pdf,.txt">
+            <label>Upload Resume</label>
+            <input type="file" name="resume_file">
 
-        <p style="text-align:center;">— OR —</p>
+            <p style="text-align:center;">OR</p>
 
-        <label><b>Paste Resume</b></label>
-        <textarea name="resume" rows="6"></textarea>
+            <textarea name="resume" placeholder="Paste resume..."></textarea>
 
-        <label><b>Job Description</b></label>
-        <textarea name="job" rows="6" required></textarea>
+            <textarea name="job" placeholder="Paste job description..." required></textarea>
 
-        <button type="submit">Analyze Resume</button>
-
-    </form>
+            <button type="submit">Analyze</button>
+        </form>
+    </div>
 </div>
-
-</body>
-</html>
