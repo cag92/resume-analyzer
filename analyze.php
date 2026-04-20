@@ -1,80 +1,85 @@
 <?php
-error_reporting(E_ALL);
 ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
-// Get API key from Render
+// Load PDF parser
+require 'vendor/autoload.php';
+use Smalot\PdfParser\Parser;
+
+// Get API key from environment (Render)
 $OPENAI_API_KEY = getenv("OPENAI_API_KEY");
 
-if (!$OPENAI_API_KEY) {
-    die("Missing API key.");
+// INPUT HANDLING (PDF + TEXT)
+
+$resumeText = $_POST['resume'] ?? '';
+$job = $_POST['job'] ?? '';
+
+// Handle file upload
+if (isset($_FILES['resume_file']) && $_FILES['resume_file']['error'] === 0) {
+
+    $fileTmp = $_FILES['resume_file']['tmp_name'];
+    $fileName = $_FILES['resume_file']['name'];
+    $ext = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+
+    if ($ext === "pdf") {
+        try {
+            $parser = new Parser();
+            $pdf = $parser->parseFile($fileTmp);
+            $resumeText = $pdf->getText();
+        } catch (Exception $e) {
+            $resumeText = "Error reading PDF.";
+        }
+    } elseif ($ext === "txt") {
+        $resumeText = file_get_contents($fileTmp);
+    }
 }
 
-// Validate upload
-if (!isset($_FILES['resume']) || $_FILES['resume']['error'] !== 0) {
-    die("File upload failed.");
+// Validate input
+if (trim($resumeText) === '' || trim($job) === '') {
+    die("Resume and Job Description are required.");
 }
 
-// Read inputs
-$resumeText = file_get_contents($_FILES['resume']['tmp_name']);
-$rawJobDesc = $_POST['jobdesc'];
+// SIMPLE SKILL MATCHING
 
-// Clean text
-function cleanText($text) {
-    $text = strtolower($text);
-    return preg_replace("/[^a-z0-9 ]/", "", $text);
-}
-
-$cleanResume = cleanText($resumeText);
-$cleanJob = cleanText($rawJobDesc);
-
-// Skills list
 $skills = ["python","java","sql","html","css","javascript","react","aws","docker"];
 
 function findSkills($text, $skills) {
     $found = [];
     foreach ($skills as $skill) {
-        if (strpos($text, $skill) !== false) {
+        if (stripos($text, $skill) !== false) {
             $found[] = $skill;
         }
     }
     return $found;
 }
 
-// Match logic
-$resumeSkills = findSkills($cleanResume, $skills);
-$jobSkills = findSkills($cleanJob, $skills);
+$resumeSkills = findSkills($resumeText, $skills);
+$jobSkills = findSkills($job, $skills);
 
 $matched = array_intersect($resumeSkills, $jobSkills);
 $missing = array_diff($jobSkills, $resumeSkills);
 
 $score = count($matched) / max(count($jobSkills), 1) * 100;
 
-// Highlight missing skills
-foreach ($missing as $skill) {
-    $rawJobDesc = str_ireplace(
-        $skill,
-        "<span class='highlight'>$skill</span>",
-        $rawJobDesc
-    );
-}
+// AI ANALYSIS
 
-// 🤖 AI Section
+$aiOutput = "AI temporarily unavailable.";
 
-$aiOutput = "AI temporarily unavailable (rate limit reached).";
+if ($OPENAI_API_KEY && strlen($job) > 50) {
 
-if (strlen($rawJobDesc) > 50) {
+    $prompt = "Analyze this resume vs job description.
 
-    $prompt = "Compare this resume to the job description and give:
-    - Match score
-    - Strengths
-    - Missing skills
-    - Suggestions
+Give:
+- Match score
+- Strengths
+- Missing skills
+- Suggestions
 
-    Resume:
-    $resumeText
+Resume:
+$resumeText
 
-    Job:
-    $rawJobDesc";
+Job:
+$job";
 
     $data = [
         "model" => "gpt-4o-mini",
@@ -94,7 +99,6 @@ if (strlen($rawJobDesc) > 50) {
 
     $context = stream_context_create($options);
 
-    // suppress error to avoid crash
     $response = @file_get_contents(
         "https://api.openai.com/v1/chat/completions",
         false,
@@ -107,8 +111,11 @@ if (strlen($rawJobDesc) > 50) {
         if (isset($result["choices"][0]["message"]["content"])) {
             $aiOutput = $result["choices"][0]["message"]["content"];
         }
+    } else {
+        $aiOutput = "⚠️ AI rate limit reached or API error.";
     }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -130,21 +137,21 @@ if (strlen($rawJobDesc) > 50) {
 
 <h3>Matched Skills</h3>
 <ul>
-<?php foreach ($matched as $m) echo "<li class='good'>✔ $m</li>"; ?>
+<?php foreach ($matched as $m) echo "<li class='good'>✔ " . htmlspecialchars($m) . "</li>"; ?>
 </ul>
 
 <h3>Missing Skills</h3>
 <ul>
-<?php foreach ($missing as $m) echo "<li class='bad'>✖ $m</li>"; ?>
+<?php foreach ($missing as $m) echo "<li class='bad'>✖ " . htmlspecialchars($m) . "</li>"; ?>
 </ul>
 
-<h3>Job Description Analysis</h3>
-<p><?php echo $rawJobDesc; ?></p>
+<h3>Job Description</h3>
+<p><?php echo nl2br(htmlspecialchars($job)); ?></p>
 
 <hr>
 
 <h2>AI Analysis</h2>
-<p style="color:orange;">(May be limited due to API usage)</p>
+<p style="color:orange;">(AI may be limited due to usage limits)</p>
 
 <div class="ai-box">
 <?php echo nl2br(htmlspecialchars($aiOutput)); ?>
