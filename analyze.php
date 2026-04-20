@@ -110,6 +110,28 @@ $job";
         $aiOutput = $result['choices'][0]['message']['content'] ?? "AI error.";
     }
 }
+function highlightSkills($text, $matched, $missing) {
+
+    // Highlight matched skills (green)
+    foreach ($matched as $skill) {
+        $text = preg_replace(
+            "/(" . preg_quote($skill, '/') . ")/i",
+            "<span class='highlight-good'>$1</span>",
+            $text
+        );
+    }
+
+    // Highlight missing skills (red)
+    foreach ($missing as $skill) {
+        $text = preg_replace(
+            "/(" . preg_quote($skill, '/') . ")/i",
+            "<span class='highlight-bad'>$1</span>",
+            $text
+        );
+    }
+
+    return $text;
+}
 ?>
 
 <!DOCTYPE html>
@@ -150,7 +172,9 @@ $job";
 
 <h3>🧾 Extracted Resume</h3>
 <div class="box">
-<?php echo nl2br(htmlspecialchars(substr($resumeText, 0, 2000))); ?>
+<?php $safeText = htmlspecialchars($resumeText);
+$highlighted = highlightSkills($safeText, $matched, $missing);
+echo nl2br($highlighted); ?>
 </div>
 
 <hr>

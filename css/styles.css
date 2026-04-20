@@ -40,6 +40,20 @@ button {
     text-align: center;
 }
 
+.highlight-good {
+    background-color: #c8f7c5;
+    font-weight: bold;
+    padding: 2px;
+    border-radius: 4px;
+}
+
+.highlight-bad {
+    background-color: #f7c5c5;
+    font-weight: bold;
+    padding: 2px;
+    border-radius: 4px;
+}
+
 .good { color: green; }
 .bad { color: red; }
 
