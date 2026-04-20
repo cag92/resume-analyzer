@@ -8,7 +8,6 @@ use Smalot\PdfParser\Parser;
 
 // Get API key from environment (Render)
 $OPENAI_API_KEY = getenv("OPENAI_API_KEY");
-var_dump($OPENAI_API_KEY);
 
 // INPUT HANDLING (PDF + TEXT)
 
