@@ -1,53 +1,46 @@
 body {
-  font-family: Arial;
-  background: #f5f7fb;
+    background: #f5f5f5;
+    font-family: Lil Grotesque, Poppins, Arial;
 }
 
 .container {
-  width: 60%;
-  margin: auto;
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
+    max-width: 900px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
 }
 
 textarea {
-  width: 100%;
-  height: 150px;
-}
-
-button {
-  padding: 10px;
-  margin-top: 10px;
-}
-
-.highlight {
-  background: yellow;
-}
-
-.good {
-  color: green;
-}
-
-.bad {
-  color: red;
+    width: 100%;
+    margin-bottom: 10px;
 }
 
 .progress {
-  width: 100%;
-  background: #ddd;
-  border-radius: 10px;
+    background: #ddd;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 .progress-fill {
-  background: green;
-  color: white;
-  text-align: center;
-  border-radius: 10px;
+    background: #4CAF50;
+    color: white;
+    padding: 5px;
+    text-align: center;
+}
+
+.good { color: green; }
+.bad { color: red; }
+
+.box {
+    background: #f4f4f4;
+    padding: 10px;
+    max-height: 200px;
+    overflow: auto;
 }
 
 .ai-box {
-  background: #eef3ff;
-  padding: 15px;
-  border-radius: 10px;
+    background: #eef;
+    padding: 10px;
+    border-radius: 5px;
 }

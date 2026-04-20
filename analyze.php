@@ -2,15 +2,12 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-// Load PDF parser
 require 'vendor/autoload.php';
 use Smalot\PdfParser\Parser;
 
-// Get API key from environment (Render)
 $OPENAI_API_KEY = getenv("OPENAI_API_KEY");
 
-// INPUT HANDLING (PDF + TEXT)
-
+// ------------------ INPUT ------------------
 $resumeText = $_POST['resume'] ?? '';
 $job = $_POST['job'] ?? '';
 
@@ -23,24 +20,27 @@ if (isset($_FILES['resume_file']) && $_FILES['resume_file']['error'] === 0) {
 
     if ($ext === "pdf") {
         try {
-            $parser = new Parser();
+            $parser = new \Smalot\PdfParser\Parser();
             $pdf = $parser->parseFile($fileTmp);
             $resumeText = $pdf->getText();
         } catch (Exception $e) {
-            $resumeText = "Error reading PDF.";
+            die("Error reading PDF.");
         }
     } elseif ($ext === "txt") {
         $resumeText = file_get_contents($fileTmp);
     }
 }
 
-// Validate input
+// Validate
 if (trim($resumeText) === '' || trim($job) === '') {
     die("Resume and Job Description are required.");
 }
 
-// SIMPLE SKILL MATCHING
+// Limit size (important)
+$resumeText = substr($resumeText, 0, 4000);
+$job = substr($job, 0, 2000);
 
+// ------------------ SKILL MATCHING ------------------
 $skills = ["python","java","sql","html","css","javascript","react","aws","docker"];
 
 function findSkills($text, $skills) {
@@ -60,20 +60,28 @@ $matched = array_intersect($resumeSkills, $jobSkills);
 $missing = array_diff($jobSkills, $resumeSkills);
 
 $score = count($matched) / max(count($jobSkills), 1) * 100;
+$score = round($score);
 
-// AI ANALYSIS
+// Score label
+if ($score > 80) $label = "Excellent Match";
+elseif ($score > 60) $label = "Good Match";
+elseif ($score > 40) $label = "Moderate Match";
+else $label = "Weak Match";
 
-$aiOutput = "AI temporarily unavailable.";
+// ------------------ AI ------------------
+$aiOutput = "AI unavailable.";
 
-if ($OPENAI_API_KEY && strlen($job) > 50) {
+if ($OPENAI_API_KEY) {
 
-    $prompt = "Analyze this resume vs job description.
+    $prompt = "You are an expert career coach.
 
-Give:
-- Match score
-- Strengths
-- Missing skills
-- Suggestions
+Analyze this resume vs job description.
+
+Return:
+1. Match score (0-100)
+2. 3 strengths
+3. 3 missing skills
+4. 3 improvement suggestions
 
 Resume:
 $resumeText
@@ -82,40 +90,34 @@ Job:
 $job";
 
     $data = [
-        "model" => "gpt-4o-mini",
+        "model" => "gpt-4.1-mini",
         "messages" => [
             ["role" => "user", "content" => $prompt]
         ]
     ];
 
-    $options = [
-        "http" => [
-            "header" => "Content-Type: application/json\r\n" .
-                        "Authorization: Bearer $OPENAI_API_KEY\r\n",
-            "method" => "POST",
-            "content" => json_encode($data)
-        ]
-    ];
+    $ch = curl_init("https://api.openai.com/v1/chat/completions");
 
-    $context = stream_context_create($options);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        "Content-Type: application/json",
+        "Authorization: Bearer " . $OPENAI_API_KEY
+    ]);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 
-    $response = @file_get_contents(
-        "https://api.openai.com/v1/chat/completions",
-        false,
-        $context
-    );
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-    if ($response !== false) {
+    curl_close($ch);
+
+    if ($httpCode == 200) {
         $result = json_decode($response, true);
-
-        if (isset($result["choices"][0]["message"]["content"])) {
-            $aiOutput = $result["choices"][0]["message"]["content"];
-        }
+        $aiOutput = $result['choices'][0]['message']['content'] ?? "AI error.";
     } else {
-        $aiOutput = "⚠️ AI rate limit reached or API error.";
+        $aiOutput = "⚠️ API error (HTTP $httpCode)";
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -127,22 +129,22 @@ $job";
 
 <div class="container">
 
-<h2>Match Score: <?php echo round($score); ?>%</h2>
+<h2>Match Score: <?php echo $score; ?>% (<?php echo $label; ?>)</h2>
 
 <div class="progress">
     <div class="progress-fill" style="width: <?php echo $score; ?>%">
-        <?php echo round($score); ?>%
+        <?php echo $score; ?>%
     </div>
 </div>
 
 <h3>Matched Skills</h3>
 <ul>
-<?php foreach ($matched as $m) echo "<li class='good'>✔ " . htmlspecialchars($m) . "</li>"; ?>
+<?php foreach ($matched as $m) echo "<li class='good'>✔ $m</li>"; ?>
 </ul>
 
 <h3>Missing Skills</h3>
 <ul>
-<?php foreach ($missing as $m) echo "<li class='bad'>✖ " . htmlspecialchars($m) . "</li>"; ?>
+<?php foreach ($missing as $m) echo "<li class='bad'>✖ $m</li>"; ?>
 </ul>
 
 <h3>Job Description</h3>
@@ -150,9 +152,14 @@ $job";
 
 <hr>
 
-<h2>AI Analysis</h2>
-<p style="color:orange;">(AI may be limited due to usage limits)</p>
+<h3>Extracted Resume Text</h3>
+<div class="box">
+<?php echo nl2br(htmlspecialchars(substr($resumeText, 0, 2000))); ?>
+</div>
 
+<hr>
+
+<h2>AI Analysis</h2>
 <div class="ai-box">
 <?php echo nl2br(htmlspecialchars($aiOutput)); ?>
 </div>
