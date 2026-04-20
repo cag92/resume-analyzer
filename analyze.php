@@ -129,7 +129,7 @@ $job";
 
 <div class="container">
 
-<h2>Match Score: <?php echo $score; ?>% (<?php echo $label; ?>)</h2>
+<h2>📊 Match Score: <?php echo $score; ?>% (<?php echo $label; ?>)</h2>
 
 <div class="progress">
     <div class="progress-fill" style="width: <?php echo $score; ?>%">
@@ -137,29 +137,29 @@ $job";
     </div>
 </div>
 
-<h3>Matched Skills</h3>
+<h3>✅ Matched Skills</h3>
 <ul>
 <?php foreach ($matched as $m) echo "<li class='good'>✔ $m</li>"; ?>
 </ul>
 
-<h3>Missing Skills</h3>
+<h3>❌ Missing Skills</h3>
 <ul>
 <?php foreach ($missing as $m) echo "<li class='bad'>✖ $m</li>"; ?>
 </ul>
 
-<h3>Job Description</h3>
+<h3>📄 Job Description</h3>
 <p><?php echo nl2br(htmlspecialchars($job)); ?></p>
 
 <hr>
 
-<h3>Extracted Resume Text</h3>
+<h3>🧾 Extracted Resume</h3>
 <div class="box">
 <?php echo nl2br(htmlspecialchars(substr($resumeText, 0, 2000))); ?>
 </div>
 
 <hr>
 
-<h2>AI Analysis</h2>
+<h2>🤖 AI Analysis</h2>
 <div class="ai-box">
 <?php echo nl2br(htmlspecialchars($aiOutput)); ?>
 </div>
