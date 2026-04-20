@@ -1,11 +1,9 @@
 body {
     margin: 0;
-    font-family: 'Segoe UI', Tahoma, sans-serif;
+    font-family: 'Segoe UI', sans-serif;
     background: linear-gradient(135deg, #667eea, #764ba2);
-    color: #333;
 }
 
-/* MAIN CARD */
 .container {
     max-width: 900px;
     margin: 50px auto;
@@ -15,92 +13,44 @@ body {
     box-shadow: 0px 10px 30px rgba(0,0,0,0.2);
 }
 
-/* HEADINGS */
-h1, h2, h3 {
-    margin-top: 0;
-}
-
-/* INPUTS */
 textarea, input[type="file"] {
     width: 100%;
-    margin-top: 5px;
     margin-bottom: 15px;
     padding: 10px;
     border-radius: 8px;
-    border: 1px solid #ccc;
-    font-size: 14px;
 }
 
-/* BUTTON */
 button {
     background: #667eea;
     color: white;
+    padding: 12px;
     border: none;
-    padding: 12px 20px;
     border-radius: 8px;
     cursor: pointer;
-    font-size: 16px;
-    transition: 0.2s;
 }
 
-button:hover {
-    background: #5a67d8;
-}
-
-/* PROGRESS BAR */
 .progress {
     background: #eee;
     border-radius: 20px;
-    overflow: hidden;
-    margin-bottom: 20px;
 }
 
 .progress-fill {
-    height: 25px;
-    line-height: 25px;
-    background: linear-gradient(90deg, #4CAF50, #2ecc71);
+    background: #4CAF50;
     color: white;
     text-align: center;
-    font-weight: bold;
 }
 
-/* LISTS */
-ul {
-    padding-left: 20px;
-}
+.good { color: green; }
+.bad { color: red; }
 
-.good {
-    color: #2ecc71;
-    font-weight: bold;
-}
-
-.bad {
-    color: #e74c3c;
-    font-weight: bold;
-}
-
-/* BOXES */
 .box {
-    background: #f8f9fa;
-    padding: 15px;
-    border-radius: 8px;
+    background: #f4f4f4;
+    padding: 10px;
     max-height: 200px;
     overflow: auto;
-    font-size: 14px;
 }
 
 .ai-box {
-    background: #eef2ff;
-    padding: 15px;
-    border-radius: 8px;
-    border-left: 5px solid #667eea;
-}
-
-/* LINK */
-a {
-    display: inline-block;
-    margin-top: 15px;
-    text-decoration: none;
-    color: #667eea;
-    font-weight: bold;
+    background: #eef;
+    padding: 10px;
 }

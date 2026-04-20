@@ -1,4 +1,12 @@
-]<div class="container">
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Resume Analyzer</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div class="container">
     <h1>🚀 AI Resume Analyzer</h1>
     <p>Upload your resume and compare it to a job description using AI.</p>
 
@@ -19,3 +27,6 @@
 
     </form>
 </div>
+
+</body>
+</html>

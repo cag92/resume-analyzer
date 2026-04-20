@@ -7,40 +7,35 @@ use Smalot\PdfParser\Parser;
 
 $OPENAI_API_KEY = getenv("OPENAI_API_KEY");
 
-// ------------------ INPUT ------------------
+// INPUT
 $resumeText = $_POST['resume'] ?? '';
 $job = $_POST['job'] ?? '';
 
-// Handle file upload
+// FILE UPLOAD
 if (isset($_FILES['resume_file']) && $_FILES['resume_file']['error'] === 0) {
-
     $fileTmp = $_FILES['resume_file']['tmp_name'];
     $fileName = $_FILES['resume_file']['name'];
     $ext = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
 
     if ($ext === "pdf") {
-        try {
-            $parser = new \Smalot\PdfParser\Parser();
-            $pdf = $parser->parseFile($fileTmp);
-            $resumeText = $pdf->getText();
-        } catch (Exception $e) {
-            die("Error reading PDF.");
-        }
+        $parser = new \Smalot\PdfParser\Parser();
+        $pdf = $parser->parseFile($fileTmp);
+        $resumeText = $pdf->getText();
     } elseif ($ext === "txt") {
         $resumeText = file_get_contents($fileTmp);
     }
 }
 
-// Validate
+// VALIDATION
 if (trim($resumeText) === '' || trim($job) === '') {
     die("Resume and Job Description are required.");
 }
 
-// Limit size (important)
+// LIMIT SIZE
 $resumeText = substr($resumeText, 0, 4000);
 $job = substr($job, 0, 2000);
 
-// ------------------ SKILL MATCHING ------------------
+// SKILLS
 $skills = ["python","java","sql","html","css","javascript","react","aws","docker"];
 
 function findSkills($text, $skills) {
@@ -59,16 +54,15 @@ $jobSkills = findSkills($job, $skills);
 $matched = array_intersect($resumeSkills, $jobSkills);
 $missing = array_diff($jobSkills, $resumeSkills);
 
-$score = count($matched) / max(count($jobSkills), 1) * 100;
-$score = round($score);
+$score = round(count($matched) / max(count($jobSkills), 1) * 100);
 
-// Score label
+// LABEL
 if ($score > 80) $label = "Excellent Match";
 elseif ($score > 60) $label = "Good Match";
 elseif ($score > 40) $label = "Moderate Match";
 else $label = "Weak Match";
 
-// ------------------ AI ------------------
+// AI
 $aiOutput = "AI unavailable.";
 
 if ($OPENAI_API_KEY) {
@@ -114,8 +108,6 @@ $job";
     if ($httpCode == 200) {
         $result = json_decode($response, true);
         $aiOutput = $result['choices'][0]['message']['content'] ?? "AI error.";
-    } else {
-        $aiOutput = "⚠️ API error (HTTP $httpCode)";
     }
 }
 ?>
@@ -124,6 +116,7 @@ $job";
 <html>
 <head>
 <link rel="stylesheet" href="css/styles.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
@@ -137,6 +130,12 @@ $job";
     </div>
 </div>
 
+<h3>📊 Skill Match Visualization</h3>
+<canvas id="skillsChart"></canvas>
+
+<h3>📈 Overall Match</h3>
+<canvas id="scoreChart" style="max-width:300px;"></canvas>
+
 <h3>✅ Matched Skills</h3>
 <ul>
 <?php foreach ($matched as $m) echo "<li class='good'>✔ $m</li>"; ?>
@@ -146,9 +145,6 @@ $job";
 <ul>
 <?php foreach ($missing as $m) echo "<li class='bad'>✖ $m</li>"; ?>
 </ul>
-
-<h3>📄 Job Description</h3>
-<p><?php echo nl2br(htmlspecialchars($job)); ?></p>
 
 <hr>
 
@@ -164,10 +160,43 @@ $job";
 <?php echo nl2br(htmlspecialchars($aiOutput)); ?>
 </div>
 
-<br>
 <a href="index.php">Analyze Another</a>
 
 </div>
+
+<script>
+const matchedCount = <?php echo count($matched); ?>;
+const missingCount = <?php echo count($missing); ?>;
+const scoreValue = <?php echo $score; ?>;
+
+// BAR CHART
+new Chart(document.getElementById('skillsChart'), {
+    type: 'bar',
+    data: {
+        labels: ['Matched Skills', 'Missing Skills'],
+        datasets: [{
+            data: [matchedCount, missingCount]
+        }]
+    },
+    options: {
+        plugins: { legend: { display: false } }
+    }
+});
+
+// DOUGHNUT CHART
+new Chart(document.getElementById('scoreChart'), {
+    type: 'doughnut',
+    data: {
+        labels: ['Match', 'Remaining'],
+        datasets: [{
+            data: [scoreValue, 100 - scoreValue]
+        }]
+    },
+    options: {
+        cutout: '70%'
+    }
+});
+</script>
 
 </body>
 </html>
