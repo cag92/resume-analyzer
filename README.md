@@ -35,7 +35,7 @@ This project is a full-stack web application built using:
 - JavaScript (frontend interactivity)  
 - MySQL (data storage and management)  
 - Chart.js (data visualization)  
-- :contentReference[oaicite:0]{index=0} API (natural language analysis and feedback generation)
+- OpenAI API (natural language analysis and feedback generation)
 
 ---
 
@@ -92,12 +92,14 @@ The system is designed to help users *understand* their resume, not just analyze
 
 ## 📸 Screenshots
 
-(Add these for maximum impact)
+### 🟦 Resume Upload Interface
+![Upload Screen](screenhsots/home.png)
 
-- Resume upload interface  
-- Analysis results page  
-- Skill comparison visualization  
-- AI feedback output section  
+### 📊 Skill Breakdown Dashboard
+![Dashboard](screenhsots/results.png)
+
+### 💬 Higlighted Skills
+![Feedback](screenhsots/highlight.png)
 
 ---
 
