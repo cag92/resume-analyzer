@@ -1,133 +1,108 @@
-# 🚀 AI Resume Analyzer
+⭐ AI Resume Analyzer — Human-Centered Career Feedback System
+🧠 Overview
 
-![PHP](https://img.shields.io/badge/PHP-Backend-blue)
-![AI](https://img.shields.io/badge/AI-OpenAI-green)
-![Status](https://img.shields.io/badge/Status-Live-brightgreen)
-![License](https://img.shields.io/badge/License-Educational-lightgrey)
+The AI Resume Analyzer is a full-stack web application that evaluates resumes against job descriptions and generates clear, structured, and actionable feedback using AI.
 
----
+The goal is not just to score resumes, but to help users understand why they are (or are not) a match and what they can improve.
 
-## 🌐 Live Demo
+🎯 Problem
 
-👉 **Try it here:**
-🔗 https://the-resume-analyzer.onrender.com
+Students and job seekers often struggle with:
 
-👉 **GitHub Repository:**
-🔗 https://github.com/cag92/resume-analyzer
+Vague or unhelpful resume feedback
+Difficulty interpreting job requirements
+Lack of clarity on skill gaps
+No structured way to compare resumes to job descriptions
 
----
+Most tools provide either:
 
-## ✨ Features
+❌ overly simplistic keyword matching
+or
+❌ overly complex AI output that is not actionable
 
-* 📄 Upload or paste resumes (PDF/TXT)
-* 🧠 AI-powered resume analysis
-* 🎯 Skill matching system
-* 📊 Interactive charts (skills + score)
-* 🔍 Highlighted skills inside resume
+👥 Users
+College students applying for internships or jobs
+Early-career applicants improving resumes
+Users seeking structured feedback on skill alignment
+💡 Design Goal
 
----
+To bridge the gap between raw AI output and human understanding by transforming resume analysis into:
 
-## 📸 Preview
+Clear skill comparisons
+Visual feedback
+Actionable improvement suggestions
+An intuitive user experience
+⚙️ Solution
 
-### 🏠 Home Page
-![Home](screenshots/home.png)
+Built a full-stack web application using:
 
-### 📊 Results Dashboard
-![Results](screenshots/results.png)
+PHP (backend logic & API handling)
+JavaScript (frontend interactivity)
+MySQL (data storage)
+Chart.js (visual analytics)
+OpenAI API (natural language analysis)
+Core system components:
+PDF Resume Parsing → extracts structured resume content
+Skill Matching Algorithm → compares resume content with job descriptions
+AI Feedback Layer → converts analysis into human-readable insights
+Visualization Dashboard → displays skill gaps and match scores
+📊 Key Features
+📄 Resume Analysis
 
-### 🔍 Skill Highlighting
-![Highlight](screenshots/highlight.png)
+Uploads a resume and evaluates it against a job description in real time.
 
----
+🧠 AI-Generated Feedback
 
-## 📊 How It Works
+Uses AI to provide:
 
-1. Upload or paste a resume
-2. Enter a job description
-3. System extracts and analyzes text
-4. Skills are matched and scored
-5. Charts visualize results
-6. AI generates feedback
+skill gap explanations
+improvement suggestions
+contextual resume advice
+📊 Visual Dashboard
+Skill match scoring
+Category-based breakdown
+Interactive charts for interpretation
+🔍 Resume-to-Job Matching
 
----
+Computes compatibility between resume content and job requirements.
 
-## 🛠️ Tech Stack
+🎨 Human-Centered Design Focus
 
-* **Frontend:** HTML, CSS, JavaScript
-* **Backend:** PHP
-* **AI:** OpenAI API
-* **Charts:** Chart.js
-* **PDF Parsing:** smalot/pdfparser
+This project was designed with a focus on human-computer interaction principles, including:
 
----
+Translating complex AI output into simple insights
+Reducing cognitive load for users
+Prioritizing clarity over technical complexity
+Designing for non-technical users
+Emphasizing actionable feedback rather than raw data
 
-## ⚙️ Installation
+The system is intentionally structured to help users understand their resume, not just analyze it.
 
-```bash
-git clone https://github.com/cag92/resume-analyzer
-cd ai-resume-analyzer
-php composer.phar install
-```
+⚙️ Technical Highlights
+Custom resume parsing pipeline for PDF text extraction
+Rule-based + AI-assisted skill comparison system
+Structured prompt engineering for consistent AI output
+Dynamic front-end dashboard for real-time visualization
+Database-backed storage for resumes and results
+📸 Screenshots
 
-### Set API Key
+(Add these in your repo — this is critical)
 
-```bash
-export OPENAI_API_KEY=your_api_key_here
-```
+Resume upload page
+Analysis results view
+Skill gap visualization dashboard
+AI feedback section
+🧩 Challenges
+Handling inconsistent resume formats (PDF variability)
+Structuring AI output into predictable formats
+Balancing automated scoring with meaningful interpretation
+Designing a UI that simplifies complex feedback
+🚀 Future Improvements
+Personalized resume improvement roadmap
+Multi-version resume tracking
+Enhanced semantic similarity (embedding-based matching)
+Expanded job recommendation system
+Improved UX flow for step-by-step feedback
+🔑 Key Takeaway
 
-### Run Locally
-
-```bash
-php -S localhost:8000
-```
-
----
-
-## 🌍 Deployment
-
-Live on:
-👉 https://the-resume-analyzer.onrender.com
-
----
-
-## 🔒 Security
-
-* API keys stored securely using environment variables
-* `.gitignore` prevents sensitive uploads
-* Input sanitization included
-
----
-
-## 🚀 Future Improvements
-
-* 📄 Downloadable PDF reports
-* 👤 User accounts
-* 📊 Advanced analytics
-* 🧠 Better NLP skill detection
-
----
-
-## 👨‍💻 Author
-
-Christian Gay
-NJIT Student | Aspiring Software Developer
-
----
-
-## ⭐ Why This Project Stands Out
-
-This project combines:
-
-* Backend development (PHP)
-* Frontend UI/UX design
-* AI integration
-* Data visualization
-* File processing
-
-➡️ Demonstrates full-stack development + real-world application
-
----
-
-## 📜 License
-
-For educational and portfolio use.
+This project focuses on more than automation—it emphasizes interpreting AI results in a way that is useful, understandable, and actionable for real users.
