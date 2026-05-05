@@ -1,108 +1,116 @@
-⭐ AI Resume Analyzer — Human-Centered Career Feedback System
-🧠 Overview
+# AI Resume Analyzer
 
-The AI Resume Analyzer is a full-stack web application that evaluates resumes against job descriptions and generates clear, structured, and actionable feedback using AI.
+A full-stack, AI-powered web application that evaluates resumes against job descriptions and generates structured, actionable feedback to help users improve their applications.
 
-The goal is not just to score resumes, but to help users understand why they are (or are not) a match and what they can improve.
+---
 
-🎯 Problem
+## 🧠 Problem
 
-Students and job seekers often struggle with:
+Job seekers often struggle with:
+- Understanding why their resume does not match a job description  
+- Receiving vague or non-actionable feedback from traditional tools  
+- Identifying specific skill gaps in a structured way  
+- Translating job requirements into meaningful improvements  
 
-Vague or unhelpful resume feedback
-Difficulty interpreting job requirements
-Lack of clarity on skill gaps
-No structured way to compare resumes to job descriptions
+Most existing tools either rely on simple keyword matching or provide unstructured AI output that is difficult to interpret.
 
-Most tools provide either:
+---
 
-❌ overly simplistic keyword matching
-or
-❌ overly complex AI output that is not actionable
+## 🎯 Goal
 
-👥 Users
-College students applying for internships or jobs
-Early-career applicants improving resumes
-Users seeking structured feedback on skill alignment
-💡 Design Goal
+To design a system that transforms resume evaluation into a **clear, human-centered feedback experience** by combining structured data analysis with AI-generated insights.
 
-To bridge the gap between raw AI output and human understanding by transforming resume analysis into:
+The focus is not just scoring resumes, but helping users understand:
+- What they are missing  
+- Why they are not a match  
+- How they can improve  
 
-Clear skill comparisons
-Visual feedback
-Actionable improvement suggestions
-An intuitive user experience
-⚙️ Solution
+---
 
-Built a full-stack web application using:
+## ⚙️ Solution
 
-PHP (backend logic & API handling)
-JavaScript (frontend interactivity)
-MySQL (data storage)
-Chart.js (visual analytics)
-OpenAI API (natural language analysis)
-Core system components:
-PDF Resume Parsing → extracts structured resume content
-Skill Matching Algorithm → compares resume content with job descriptions
-AI Feedback Layer → converts analysis into human-readable insights
-Visualization Dashboard → displays skill gaps and match scores
-📊 Key Features
-📄 Resume Analysis
+This project is a full-stack web application built using:
 
-Uploads a resume and evaluates it against a job description in real time.
+- PHP (backend logic and API handling)  
+- JavaScript (frontend interactivity)  
+- MySQL (data storage and management)  
+- Chart.js (data visualization)  
+- :contentReference[oaicite:0]{index=0} API (natural language analysis and feedback generation)
 
-🧠 AI-Generated Feedback
+---
 
-Uses AI to provide:
+## 🧩 Core Features
 
-skill gap explanations
-improvement suggestions
-contextual resume advice
-📊 Visual Dashboard
-Skill match scoring
-Category-based breakdown
-Interactive charts for interpretation
-🔍 Resume-to-Job Matching
+### 📄 Resume Analysis
+Users can upload a resume and compare it against a job description to receive a compatibility evaluation.
 
-Computes compatibility between resume content and job requirements.
+### 🧠 AI-Generated Feedback
+The system uses AI to:
+- Interpret resume content  
+- Analyze job requirements  
+- Generate structured, human-readable feedback  
+- Provide improvement suggestions  
 
-🎨 Human-Centered Design Focus
+### 📊 Skill Matching System
+A custom matching algorithm evaluates alignment between:
+- Resume skills  
+- Job description requirements  
 
-This project was designed with a focus on human-computer interaction principles, including:
+### 📈 Visualization Dashboard
+Interactive charts display:
+- Skill match percentages  
+- Category-based breakdown of strengths and gaps  
+- Overall compatibility score  
 
-Translating complex AI output into simple insights
-Reducing cognitive load for users
-Prioritizing clarity over technical complexity
-Designing for non-technical users
-Emphasizing actionable feedback rather than raw data
+---
 
-The system is intentionally structured to help users understand their resume, not just analyze it.
+## 🧠 Human-Centered Design Focus
 
-⚙️ Technical Highlights
-Custom resume parsing pipeline for PDF text extraction
-Rule-based + AI-assisted skill comparison system
-Structured prompt engineering for consistent AI output
-Dynamic front-end dashboard for real-time visualization
-Database-backed storage for resumes and results
-📸 Screenshots
+This project emphasizes **usability and clarity over raw technical output**.
 
-(Add these in your repo — this is critical)
+Key design principles:
+- Translating complex AI results into simple insights  
+- Reducing cognitive load for users  
+- Prioritizing actionable feedback over raw data  
+- Designing for non-technical users  
+- Improving accessibility of career-related information  
 
-Resume upload page
-Analysis results view
-Skill gap visualization dashboard
-AI feedback section
-🧩 Challenges
-Handling inconsistent resume formats (PDF variability)
-Structuring AI output into predictable formats
-Balancing automated scoring with meaningful interpretation
-Designing a UI that simplifies complex feedback
-🚀 Future Improvements
-Personalized resume improvement roadmap
-Multi-version resume tracking
-Enhanced semantic similarity (embedding-based matching)
-Expanded job recommendation system
-Improved UX flow for step-by-step feedback
-🔑 Key Takeaway
+The system is designed to help users *understand* their resume, not just analyze it.
 
-This project focuses on more than automation—it emphasizes interpreting AI results in a way that is useful, understandable, and actionable for real users.
+---
+
+## 🛠️ Technical Highlights
+
+- PDF resume parsing and text extraction pipeline  
+- Structured prompt design for consistent AI responses  
+- Hybrid skill-matching approach (rule-based + AI-assisted analysis)  
+- Dynamic front-end dashboard for real-time visualization  
+- MySQL-backed data storage for resumes and analysis results  
+- Modular backend architecture for scalability  
+
+---
+
+## 📸 Screenshots
+
+(Add these for maximum impact)
+
+- Resume upload interface  
+- Analysis results page  
+- Skill comparison visualization  
+- AI feedback output section  
+
+---
+
+## 🚀 Future Improvements
+
+- Personalized resume improvement roadmap  
+- Multi-version resume tracking and comparison  
+- Semantic embedding-based skill matching  
+- Job recommendation engine  
+- Improved UX flow with step-by-step guidance  
+
+---
+
+## 🔑 Key Takeaway
+
+This project demonstrates how AI can be used not just for automation, but for **interpreting complex information into clear, actionable, and human-centered insights** that improve real-world decision-making.
